@@ -1,6 +1,5 @@
 // AlignmentMotivationTool.jsx
 import React, { useState } from "react";
-import { generateFromGPT } from "./utils/generateFromGPT";
 
 export default function AlignmentMotivationTool() {
   const [person, setPerson] = useState("");
@@ -14,10 +13,18 @@ export default function AlignmentMotivationTool() {
     setLoading(true);
     setError(null);
     try {
-      const motivations = await generateFromGPT(person, context, action);
-      setResults(motivations);
+      const response = await fetch("/api/generate-alignment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ person, context, action }),
+      });
+      const data = await response.json();
+      setResults(data);
     } catch (err) {
       setError("Failed to fetch GPT results. Check console for details.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
