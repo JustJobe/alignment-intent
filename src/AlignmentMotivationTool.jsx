@@ -1,42 +1,26 @@
+// AlignmentMotivationTool.jsx
 import React, { useState } from "react";
-
-const ALIGNMENTS = [
-  { name: "Lawful Good", nickname: "The Crusader" },
-  { name: "Neutral Good", nickname: "The Benefactor" },
-  { name: "Chaotic Good", nickname: "The Rebel" },
-  { name: "Lawful Neutral", nickname: "The Judge" },
-  { name: "True Neutral", nickname: "The Balanced" },
-  { name: "Chaotic Neutral", nickname: "The Free Spirit" },
-  { name: "Lawful Evil", nickname: "The Tyrant" },
-  { name: "Neutral Evil", nickname: "The Malefactor" },
-  { name: "Chaotic Evil", nickname: "The Destroyer" },
-];
-
-const generateMotivation = (alignment, person, context, action) => {
-  const fullPerson = context ? `${person} (${context})` : person;
-  return {
-    motivation: `${fullPerson} performed the action '${action}' in a manner consistent with ${alignment.name}.`,
-    genius: `From a genius perspective, ${fullPerson} acted with strategic foresight as a ${alignment.nickname}.`,
-    incompetence: `From an incompetence perspective, ${fullPerson} misjudged the situation while trying to be a ${alignment.nickname}.`,
-  };
-};
+import { generateFromGPT } from "./utils/generateFromGPT";
 
 export default function AlignmentMotivationTool() {
   const [person, setPerson] = useState("");
   const [context, setContext] = useState("");
   const [action, setAction] = useState("");
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleGenerate = () => {
-    const motivations = ALIGNMENTS.map((alignment) => {
-      const content = generateMotivation(alignment, person, context, action);
-      return {
-        alignment: alignment.name,
-        nickname: alignment.nickname,
-        ...content,
-      };
-    });
-    setResults(motivations);
+  const handleGenerate = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const motivations = await generateFromGPT(person, context, action);
+      setResults(motivations);
+    } catch (err) {
+      setError("Failed to fetch GPT results. Check console for details.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,8 +30,11 @@ export default function AlignmentMotivationTool() {
         <input placeholder="Person" value={person} onChange={(e) => setPerson(e.target.value)} />
         <input placeholder="Context (optional)" value={context} onChange={(e) => setContext(e.target.value)} />
         <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} />
-        <button onClick={handleGenerate}>Generate</button>
+        <button onClick={handleGenerate} disabled={loading}>
+          {loading ? "Generating..." : "Generate"}
+        </button>
       </div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {results.map((res, idx) => (
           <div key={idx} style={{ background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
