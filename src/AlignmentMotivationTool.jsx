@@ -38,6 +38,8 @@ export default function AlignmentMotivationTool() {
     }
   };
 
+  const isValidArray = Array.isArray(results) && results.length > 0;
+
   return (
     <div style={{ maxWidth: 1000, margin: 'auto' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Alignment Motivation Tool</h1>
@@ -60,16 +62,18 @@ export default function AlignmentMotivationTool() {
         </pre>
       )}
 
-      <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-        {Array.isArray(results) && results.map((res, idx) => (
-          <div key={idx} style={{ background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
-            <h2>{res.alignment} ({res.nickname})</h2>
-            <p><strong>Motivation:</strong> {res.motivation}</p>
-            <p><strong>Genius:</strong> {res.genius}</p>
-            <p><strong>Incompetence:</strong> {res.incompetence}</p>
-          </div>
-        ))}
-      </div>
+      {isValidArray && (
+        <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+          {results.map((res, idx) => (
+            <div key={idx} style={{ background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
+              <h2>{res.alignment} ({res.nickname})</h2>
+              <p><strong>Motivation:</strong> {res.motivation}</p>
+              <p><strong>Genius:</strong> {res.genius}</p>
+              <p><strong>Incompetence:</strong> {res.incompetence}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
