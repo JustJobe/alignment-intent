@@ -6,11 +6,10 @@ export default function AlignmentMotivationTool() {
   const [person, setPerson] = useState("");
   const [context, setContext] = useState("");
   const [action, setAction] = useState("");
+  const [model, setModel] = useState("gpt-3.5-turbo");
   const [results, setResults] = useState([]);
-  const [rawOutput, setRawOutput] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [model, setModel] = useState("gpt-3.5-turbo");
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -18,37 +17,28 @@ export default function AlignmentMotivationTool() {
     try {
       const response = await fetch("/api/generate-alignment", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ person, context, action, model }),
       });
       const data = await response.json();
-      console.log("Full API response:", data);
-      setRawOutput(data);
-      if (!Array.isArray(data)) {
-        throw new Error("Expected an array from API response");
-      }
+      if (!Array.isArray(data)) throw new Error("Expected an array from API response");
       setResults(data);
     } catch (err) {
       setError("Failed to fetch GPT results. Check console for details.");
       console.error(err);
       setResults([]);
-      setRawOutput(null);
     } finally {
       setLoading(false);
     }
   };
 
   const handleExport = () => {
-    if (!results || results.length === 0) return;
-
+    if (!results.length) return;
     const csvHeader = "Alignment,Nickname,Motivation,Genius,Incompetence\n";
     const csvRows = results.map(r =>
       `"${r.alignment}","${r.nickname}","${r.motivation}","${r.genius}","${r.incompetence}"`
     );
     const csvContent = csvHeader + csvRows.join("\n");
-
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
     saveAs(blob, `alignment-motivation-${person || "export"}.csv`);
   };
@@ -66,10 +56,11 @@ export default function AlignmentMotivationTool() {
         <input placeholder="Context for Who (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <select value={model} onChange={(e) => setModel(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }}>
-            <option value="gpt-3.5-turbo">GPT-3.5</option>
-            <option value="gpt-4">GPT-4</option>
-          </select>
-<button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
+          <option value="gpt-3.5-turbo">GPT-3.5</option>
+          <option value="gpt-4">GPT-4</option>
+        </select>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
             {loading ? "Generating..." : "Generate"}
           </button>
           <button onClick={handleExport} disabled={!isValidArray} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
@@ -79,7 +70,6 @@ export default function AlignmentMotivationTool() {
         {loading && <div style={{ textAlign: 'center', paddingTop: '0.5rem' }}><div className="spinner" /></div>}
       </div>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-
       {isValidArray && (
         <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
           {results.map((res, idx) => (
@@ -107,7 +97,7 @@ export default function AlignmentMotivationTool() {
           100% { transform: rotate(360deg); }
         }
         @media (min-width: 600px) {
-          input, button {
+          input, button, select {
             width: auto;
           }
         }
