@@ -21,10 +21,15 @@ export default function AlignmentMotivationTool() {
         body: JSON.stringify({ person, context, action }),
       });
       const data = await response.json();
+      console.log("GPT response data:", data);
+      if (!Array.isArray(data)) {
+        throw new Error("Expected an array from API response");
+      }
       setResults(data);
     } catch (err) {
       setError("Failed to fetch GPT results. Check console for details.");
       console.error(err);
+      setResults([]); // Ensure results is reset to an empty array on error
     } finally {
       setLoading(false);
     }
@@ -43,7 +48,7 @@ export default function AlignmentMotivationTool() {
       </div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-        {results.map((res, idx) => (
+        {Array.isArray(results) && results.map((res, idx) => (
           <div key={idx} style={{ background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
             <h2>{res.alignment} ({res.nickname})</h2>
             <p><strong>Motivation:</strong> {res.motivation}</p>
