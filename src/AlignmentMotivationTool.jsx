@@ -57,7 +57,7 @@ export default function AlignmentMotivationTool() {
         <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <select value={model} onChange={(e) => setModel(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }}>
           <option value="gpt-3.5-turbo">GPT-3.5</option>
-          <option value="gpt-4">GPT-4</option>
+          <option value="gpt-4" disabled>GPT-4 (coming soon)</option>
         </select>
         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
