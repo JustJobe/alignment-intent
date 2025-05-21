@@ -1,9 +1,9 @@
 // /api/generate-alignment.js
-import { OpenAI } from "openai";
+const { OpenAI } = require("openai");
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -31,8 +31,7 @@ Return a JSON array of 9 objects like this:
     "incompetence": "..."
   },
   ...
-]
-  `.trim();
+]`.trim();
 
   try {
     const response = await openai.chat.completions.create({
@@ -62,4 +61,4 @@ Return a JSON array of 9 objects like this:
       detail: error.message || "Unexpected error"
     });
   }
-}
+};
