@@ -72,21 +72,31 @@ export default function AlignmentMotivationTool() {
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       {isValidArray && (
         <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-          {results.map((res, idx) => (
-            <div key={idx} style={{ background: '#fff', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-              <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{res.alignment} ({res.nickname})</h2>
-              <p><strong>Motivation:</strong> {res.motivation}</p>
-              <p><strong>Genius:</strong> {res.genius}</p>
-              <p><strong>Incompetence:</strong> {res.incompetence}</p>
+          {(() => {
+          const groups = {
+            Evil: [],
+            Neutral: [],
+            Good: []
+          };
+          results.slice().reverse().forEach((res) => {
+            if (res.alignment.includes("Evil")) groups.Evil.push(res);
+            else if (res.alignment.includes("Good")) groups.Good.push(res);
+            else groups.Neutral.push(res);
+          });
+          return ["Evil", "Neutral", "Good"].map((group) => (
+            <div key={group}>
+              <h2 style={{ gridColumn: '1 / -1', fontSize: '1.5rem', marginTop: '1rem', color: '#333' }}>{group} Alignments</h2>
+              {groups[group].map((res, idx) => (
+                <div key={idx} style={{ background: '#fff', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                  <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{res.alignment} ({res.nickname})</h3>
+                  <p><strong>Motivation:</strong> {res.motivation}</p>
+                  <p><strong>Genius:</strong> {res.genius}</p>
+                  <p><strong>Incompetence:</strong> {res.incompetence}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
-      <style>{`
-        .spinner {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #555;
-          border-radius: 50%;
+          ));
+        })()
           width: 30px;
           height: 30px;
           animation: spin 1s linear infinite;
