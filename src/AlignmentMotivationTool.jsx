@@ -41,30 +41,43 @@ export default function AlignmentMotivationTool() {
 
   const handleExport = () => {
     if (!results || results.length === 0) return;
-    const blob = new Blob([JSON.stringify(results, null, 2)], { type: "application/json" });
-    saveAs(blob, `alignment-motivation-${person || "export"}.json`);
+
+    const csvHeader = "Alignment,Nickname,Motivation,Genius,Incompetence\n";
+    const csvRows = results.map(r =>
+      `"${r.alignment}","${r.nickname}","${r.motivation}","${r.genius}","${r.incompetence}"`
+    );
+    const csvContent = csvHeader + csvRows.join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+    saveAs(blob, `alignment-motivation-${person || "export"}.csv`);
   };
 
   const isValidArray = Array.isArray(results) && results.length > 0;
 
   return (
     <div style={{ maxWidth: 1000, margin: 'auto', padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '1rem' }}>🎯 Alignment Motivation Tool</h1>
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '1rem' }}>
-        <input placeholder="Person" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem' }} />
-        <input placeholder="Context (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem' }} />
-        <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem' }} />
-        <button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem' }}>
-          {loading ? "Generating..." : "Generate"}
-        </button>
-        <button onClick={handleExport} disabled={!isValidArray} style={{ padding: '0.5rem 1rem' }}>
-          Export JSON
-        </button>
+      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '0.5rem' }}>🧭 TMC: The Moral Compass</h1>
+      <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#555', marginBottom: '1rem' }}>
+        Explore actions from every ethical angle.
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+        <input placeholder="Person" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Context (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
+            {loading ? "Generating..." : "Generate"}
+          </button>
+          <button onClick={handleExport} disabled={!isValidArray} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
+            Export CSV
+          </button>
+        </div>
+        {loading && <div style={{ textAlign: 'center', paddingTop: '0.5rem' }}><div className="spinner" /></div>}
       </div>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
 
       {isValidArray && (
-        <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+        <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
           {results.map((res, idx) => (
             <div key={idx} style={{ background: '#fff', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
               <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{res.alignment} ({res.nickname})</h2>
@@ -75,6 +88,26 @@ export default function AlignmentMotivationTool() {
           ))}
         </div>
       )}
+      <style>{`
+        .spinner {
+          border: 4px solid #f3f3f3;
+          border-top: 4px solid #555;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          animation: spin 1s linear infinite;
+          margin: 0 auto;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @media (min-width: 600px) {
+          input, button {
+            width: auto;
+          }
+        }
+      `}</style>
     </div>
   );
 }
