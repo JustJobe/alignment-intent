@@ -96,7 +96,9 @@ export default function AlignmentMotivationTool() {
               ))}
             </div>
           ));
-        })()
+        })()}
+      <style>{`
+        .spinner {
           width: 30px;
           height: 30px;
           animation: spin 1s linear infinite;
