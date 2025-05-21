@@ -97,23 +97,26 @@ export default function AlignmentMotivationTool() {
             </div>
           ));
         })()}
-      <style>{`
-        .spinner {
-          width: 30px;
-          height: 30px;
-          animation: spin 1s linear infinite;
-          margin: 0 auto;
-        }
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        @media (min-width: 600px) {
-          input, button, select {
-            width: auto;
-          }
-        }
-      `}</style>
+      
     </div>
   );
+}
+
+<style>{`
+  .spinner {
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @media (min-width: 600px) {
+    input, button, select {
+      width: auto;
+    }
+  }
+`}</style>
 }
