@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { person, context, action } = req.body;
+  const { person, context, action, model } = req.body;
 
   const prompt = `You are a creative alignment analyst using the D&D moral alignment chart.
 Your task is to analyze the action of a person from all nine alignments.
@@ -35,7 +35,7 @@ Return a JSON array of 9 objects like this:
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: model || "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You generate D&D alignment interpretations." },
         { role: "user", content: prompt }
@@ -47,12 +47,21 @@ Return a JSON array of 9 objects like this:
     console.log("RAW GPT OUTPUT:\n", raw);
     const start = raw.indexOf("[");
     if (start === -1) {
-      throw new Error("GPT response does not contain a JSON array.");
+      return res.status(500).json({ error: "GPT response did not contain expected JSON array." });
     }
-    const parsed = JSON.parse(raw.slice(start));
+
+    let parsed;
+    try {
+      parsed = JSON.parse(raw.slice(start));
+    } catch (parseError) {
+      console.error("Failed to parse GPT output:", parseError);
+      return res.status(500).json({ error: "Invalid JSON from GPT", raw });
+    }
+
     if (!Array.isArray(parsed)) {
-      throw new Error("Parsed result is not an array.");
+      return res.status(500).json({ error: "Parsed GPT response is not an array", parsed });
     }
+
     return res.status(200).json(parsed);
   } catch (error) {
     console.error("OpenAI API Error:", error);
