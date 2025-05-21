@@ -6,6 +6,7 @@ export default function AlignmentMotivationTool() {
   const [context, setContext] = useState("");
   const [action, setAction] = useState("");
   const [results, setResults] = useState([]);
+  const [rawOutput, setRawOutput] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -21,7 +22,8 @@ export default function AlignmentMotivationTool() {
         body: JSON.stringify({ person, context, action }),
       });
       const data = await response.json();
-      console.log("GPT response data:", data);
+      console.log("Full API response:", data);
+      setRawOutput(data);
       if (!Array.isArray(data)) {
         throw new Error("Expected an array from API response");
       }
@@ -29,7 +31,8 @@ export default function AlignmentMotivationTool() {
     } catch (err) {
       setError("Failed to fetch GPT results. Check console for details.");
       console.error(err);
-      setResults([]); // Ensure results is reset to an empty array on error
+      setResults([]);
+      setRawOutput(null);
     } finally {
       setLoading(false);
     }
@@ -47,6 +50,16 @@ export default function AlignmentMotivationTool() {
         </button>
       </div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {/* Debug output */}
+      {rawOutput && (
+        <pre style={{ background: '#f0f0f0', padding: '1rem', overflowX: 'auto', marginTop: '1rem' }}>
+          <strong>Raw Output:</strong>
+          <br />
+          {JSON.stringify(rawOutput, null, 2)}
+        </pre>
+      )}
+
       <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {Array.isArray(results) && results.map((res, idx) => (
           <div key={idx} style={{ background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
