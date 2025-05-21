@@ -10,6 +10,7 @@ export default function AlignmentMotivationTool() {
   const [rawOutput, setRawOutput] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [model, setModel] = useState("gpt-3.5-turbo");
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -20,7 +21,7 @@ export default function AlignmentMotivationTool() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ person, context, action }),
+        body: JSON.stringify({ person, context, action, model }),
       });
       const data = await response.json();
       console.log("Full API response:", data);
@@ -61,11 +62,14 @@ export default function AlignmentMotivationTool() {
         Explore actions from every ethical angle.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
-        <input placeholder="Person" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
-        <input placeholder="Context (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Who" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Context for Who (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
-        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
+        $1<select value={model} onChange={(e) => setModel(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }}>
+            <option value="gpt-3.5-turbo">GPT-3.5</option>
+            <option value="gpt-4">GPT-4</option>
+          </select>
+<button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
             {loading ? "Generating..." : "Generate"}
           </button>
           <button onClick={handleExport} disabled={!isValidArray} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
