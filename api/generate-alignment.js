@@ -35,7 +35,7 @@ Return a JSON array of 9 objects like this:
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         { role: "system", content: "You generate D&D alignment interpretations." },
         { role: "user", content: prompt }
