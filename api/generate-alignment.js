@@ -1,58 +1,57 @@
-// AlignmentMotivationTool.jsx
-import React, { useState } from "react";
+// /api/generate-alignment.js
+import { OpenAI } from "openai";
 
-export default function AlignmentMotivationTool() {
-  const [person, setPerson] = useState("");
-  const [context, setContext] = useState("");
-  const [action, setAction] = useState("");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-  const handleGenerate = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch("/api/generate-alignment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ person, context, action }),
-      });
-      const data = await response.json();
-console.log("GPT response data:", data);
-      setResults(data);
-    } catch (err) {
-      setError("Failed to fetch GPT results. Check console for details.");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-  return (
-    <div style={{ maxWidth: 1000, margin: 'auto' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center' }}>Alignment Motivation Tool</h1>
-      <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginTop: '1rem' }}>
-        <input placeholder="Person" value={person} onChange={(e) => setPerson(e.target.value)} />
-        <input placeholder="Context (optional)" value={context} onChange={(e) => setContext(e.target.value)} />
-        <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} />
-        <button onClick={handleGenerate} disabled={loading}>
-          {loading ? "Generating..." : "Generate"}
-        </button>
-      </div>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
-        {results.map((res, idx) => (
-          <div key={idx} style={{ background: 'white', padding: '1rem', borderRadius: '1rem', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
-            <h2>{res.alignment} ({res.nickname})</h2>
-            <p><strong>Motivation:</strong> {res.motivation}</p>
-            <p><strong>Genius:</strong> {res.genius}</p>
-            <p><strong>Incompetence:</strong> {res.incompetence}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  const { person, context, action } = req.body;
+
+  const prompt = `You are a creative alignment analyst using the D&D moral alignment chart.
+Your task is to analyze the action of a person from all nine alignments.
+Include three parts for each:
+1. Motivation
+2. Genius motivation
+3. Incompetence motivation
+
+Person: ${person}
+Context: ${context || "(no context)"}
+Action: ${action}
+
+Return a JSON array of 9 objects like this:
+[
+  {
+    "alignment": "Lawful Good",
+    "nickname": "The Crusader",
+    "motivation": "...",
+    "genius": "...",
+    "incompetence": "..."
+  },
+  ...
+]
+  `.trim();
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You generate D&D alignment interpretations." },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.9,
+    });
+
+    const raw = response.choices[0].message.content;
+    console.log("RAW GPT OUTPUT:\n", raw);
+    const start = raw.indexOf("[");
+    const parsed = JSON.parse(raw.slice(start));
+    if (!Array.isArray(parsed)) throw new Error("Parsed result is not an array");
+    return res.status(200).json(parsed);
+  } catch (error) {
+    console.error("OpenAI API Error:", error);
+    return res.status(500).json({ error: "Failed to generate alignment.", detail: error.message });
+  }
 }
