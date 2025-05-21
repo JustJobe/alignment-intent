@@ -47,11 +47,19 @@ Return a JSON array of 9 objects like this:
     const raw = response.choices[0].message.content;
     console.log("RAW GPT OUTPUT:\n", raw);
     const start = raw.indexOf("[");
+    if (start === -1) {
+      throw new Error("GPT response does not contain a JSON array.");
+    }
     const parsed = JSON.parse(raw.slice(start));
-    if (!Array.isArray(parsed)) throw new Error("Parsed result is not an array");
+    if (!Array.isArray(parsed)) {
+      throw new Error("Parsed result is not an array.");
+    }
     return res.status(200).json(parsed);
   } catch (error) {
     console.error("OpenAI API Error:", error);
-    return res.status(500).json({ error: "Failed to generate alignment.", detail: error.message });
+    return res.status(500).json({
+      error: "Failed to generate alignment.",
+      detail: error.message || "Unexpected error"
+    });
   }
 }
