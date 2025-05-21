@@ -63,15 +63,6 @@ export default function AlignmentMotivationTool() {
       </div>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
 
-      {/* Debug output */}
-      {rawOutput && (
-        <pre style={{ background: '#f0f0f0', padding: '1rem', overflowX: 'auto', marginTop: '1rem' }}>
-          <strong>Raw Output:</strong>
-          <br />
-          {JSON.stringify(rawOutput, null, 2)}
-        </pre>
-      )}
-
       {isValidArray && (
         <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
           {results.map((res, idx) => (
