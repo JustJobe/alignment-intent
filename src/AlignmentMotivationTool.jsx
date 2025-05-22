@@ -152,13 +152,13 @@ export default function AlignmentMotivationTool() {
       {isValidArray && (
         <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
           {(() => {
-            const groups = { Good: [], Neutral: [], Evil: [] };
+            const groups = { Evil: [], Neutral: [], Good: [] };
             results.slice().reverse().forEach((res) => {
               if (res.alignment.includes("Evil")) groups.Evil.push(res);
               else if (res.alignment.includes("Good")) groups.Good.push(res);
               else groups.Neutral.push(res);
             });
-            return ["Evil", "Neutral", "Good"].map((group) => (
+            return ["Neutral", "Good", "Evil"].map((group) => (
               <div key={group}>
                 <h2 style={{ gridColumn: '1 / -1', fontSize: '1.5rem', marginTop: '1rem', color: '#333' }}>{group} Alignments</h2>
                 {groups[group].map((res, idx) => (
