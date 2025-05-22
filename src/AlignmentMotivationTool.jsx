@@ -253,34 +253,16 @@ export default function AlignmentMotivationTool() {
   const useRandomExample = () => {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
     setLoading(true);
-    setTimeout(() => {
-            setResults(random.results);
-    } else {
-            setResults([]);
-    }
-  };
-
-  const handleGenerate = async () => {
-    setLoading(true);
-    setError(null);
-
-    const cached = exampleCache.find(
-      ex => ex.person === person && ex.context === context && ex.action === action && ex.results.length > 0
-    );
-
-    if (cached) {
-      setResults(cached.results);
-            setLoading(false);
+          setPerson(random.person);
+      setContext(random.context);
+      setAction(random.action);
+      if (random.results.length > 0) {
+        setResults(random.results);
+      } else {
+        setResults([]);
+      }
+      setLoading(false);
     }, 500);
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/generate-alignment", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ person, context, action, model }),
-      });
       const data = await response.json();
       if (!Array.isArray(data)) throw new Error("Expected an array from API response");
       setResults(data);
