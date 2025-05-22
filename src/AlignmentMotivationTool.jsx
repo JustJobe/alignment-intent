@@ -11,6 +11,69 @@ export default function AlignmentMotivationTool() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const exampleCache = [
+    {
+      person: "Donald Trump",
+      context: "During his presidency",
+      action: "Imposed tariffs on foreign goods",
+      results: []
+    },
+    {
+      person: "My friend",
+      context: "Walking downtown",
+      action: "Gave money to a stranger asking for help",
+      results: []
+    },
+    {
+      person: "My husband",
+      context: "Walking down the street",
+      action: "Kicked a puppy",
+      results: []
+    },
+    {
+      person: "Taylor Swift",
+      context: "At a fan meet-and-greet",
+      action: "Ignored a fan asking for an autograph",
+      results: []
+    },
+    {
+      person: "My mother",
+      context: "Despite being healthy",
+      action: "Keeps visiting the hospital for checkups",
+      results: []
+    },
+    {
+      person: "Elon Musk",
+      context: "After buying Twitter",
+      action: "Changed the platform rules overnight",
+      results: []
+    },
+    {
+      person: "A teacher",
+      context: "In the middle of an exam",
+      action: "Left the room unattended",
+      results: []
+    },
+    {
+      person: "A barista",
+      context: "At a coffee shop",
+      action: "Gave a free drink to a regular customer",
+      results: []
+    }
+  ];
+
+  const useRandomExample = () => {
+    const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
+    setPerson(random.person);
+    setContext(random.context);
+    setAction(random.action);
+    if (random.results.length > 0) {
+      setResults(random.results);
+    } else {
+      setResults([]);
+    }
+  };
+
   const handleGenerate = async () => {
     setLoading(true);
     setError(null);
@@ -61,6 +124,9 @@ export default function AlignmentMotivationTool() {
           setAction("Imposed tariffs on foreign goods");
         }} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem', alignSelf: 'flex-start' }}>
           Use Example
+        </button>
+        <button onClick={useRandomExample} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem', alignSelf: 'flex-start' }}>
+          Surprise Me
         </button>
         <input placeholder="Who" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Context for Who (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
