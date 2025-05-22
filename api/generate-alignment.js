@@ -21,9 +21,9 @@ Action: ${action}
 
 For each of the 9 Dungeons & Dragons alignments (Lawful Good, Neutral Good, Chaotic Good, Lawful Neutral, True Neutral, Chaotic Neutral, Lawful Evil, Neutral Evil, Chaotic Evil), provide:
 
-1. A motivation this person would have under that alignment.
-2. A genius interpretation — how the action might reflect brilliance or strategy.
-3. An incompetence interpretation — how the action might backfire or reveal flaw.
+1. A general motivation this person would have under that alignment.
+2. A genius motivation — the motivation to do so assuming extreme competence in the subject matter.
+3. An incompetant motivation — a flawed motivation assuming poor competence in the subject matter.
 
 Keep each answer rooted in the identity of the person and their context — do not generalize based on the alignment archetypes alone. Prioritize emotional realism, social relevance, or professional stakes.
 Return your output as a JSON array of 9 objects, each with "alignment", "nickname", "motivation", "genius", and "incompetence".
