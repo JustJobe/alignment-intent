@@ -252,13 +252,11 @@ export default function AlignmentMotivationTool() {
 
   const useRandomExample = () => {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
-    setPerson(random.person);
-    setContext(random.context);
-    setAction(random.action);
-    if (random.results.length > 0) {
-      setResults(random.results);
+    setLoading(true);
+    setTimeout(() => {
+            setResults(random.results);
     } else {
-      setResults([]);
+            setResults([]);
     }
   };
 
@@ -272,7 +270,8 @@ export default function AlignmentMotivationTool() {
 
     if (cached) {
       setResults(cached.results);
-      setLoading(false);
+            setLoading(false);
+    }, 500);
       return;
     }
 
