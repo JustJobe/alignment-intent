@@ -13,11 +13,41 @@ export default function AlignmentMotivationTool() {
   const [usingCache, setUsingCache] = useState(false);
 
   const exampleCache = [
-    // (Truncated for brevity — keep all existing example data unchanged)
+    {
+      person: "A barista",
+      context: "At a coffee shop",
+      action: "Gave a free drink to a regular customer",
+      results: []
+    },
+    {
+      person: "A police officer",
+      context: "While on duty",
+      action: "Let a driver off with a warning instead of a ticket",
+      results: []
+    },
+    {
+      person: "A teacher",
+      context: "In a rural school",
+      action: "Used personal funds to buy classroom supplies",
+      results: []
+    },
+    {
+      person: "A doctor",
+      context: "During a pandemic",
+      action: "Provided free consultations to underserved communities",
+      results: []
+    },
+    {
+      person: "A CEO",
+      context: "Facing a recession",
+      action: "Laid off workers while giving themselves a bonus",
+      results: []
+    }
   ];
 
   const useRandomExample = () => {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
+    if (!random) return;
     setLoading(true);
     setUsingCache(true);
     setResults([]);
@@ -41,7 +71,7 @@ export default function AlignmentMotivationTool() {
       const response = await fetch("/api/generate-alignment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ person, context, action, model }),
+        body: JSON.stringify({ person, context, action, model })
       });
       if (!response.ok) throw new Error("Failed to fetch GPT results.");
       const data = await response.json();
