@@ -253,6 +253,7 @@ export default function AlignmentMotivationTool() {
   const useRandomExample = () => {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
     setLoading(true);
+    setTimeout(() => {
           setPerson(random.person);
       setContext(random.context);
       setAction(random.action);
@@ -261,7 +262,7 @@ export default function AlignmentMotivationTool() {
       } else {
         setResults([]);
       }
-      setLoading(false);
+            setLoading(false);
     }, 500);
       const data = await response.json();
       if (!Array.isArray(data)) throw new Error("Expected an array from API response");
