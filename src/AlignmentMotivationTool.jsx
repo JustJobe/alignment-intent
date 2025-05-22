@@ -10,6 +10,7 @@ export default function AlignmentMotivationTool() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [usingCache, setUsingCache] = useState(false);
 
   const exampleCache = [
     // (Truncated for brevity — keep all existing example data unchanged)
@@ -18,6 +19,7 @@ export default function AlignmentMotivationTool() {
   const useRandomExample = () => {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
     setLoading(true);
+    setUsingCache(true);
     setTimeout(() => {
       setPerson(random.person);
       setContext(random.context);
@@ -28,10 +30,12 @@ export default function AlignmentMotivationTool() {
         setResults([]);
       }
       setLoading(false);
+      setUsingCache(false);
     }, 500);
   };
 
   const handleGenerate = async () => {
+    if (usingCache) return;
     setLoading(true);
     setError(null);
     setResults([]);
