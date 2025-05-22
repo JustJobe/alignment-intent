@@ -128,9 +128,9 @@ export default function AlignmentMotivationTool() {
         <button onClick={useRandomExample} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem', alignSelf: 'flex-start' }}>
           Surprise Me
         </button>
-        <input placeholder="Who" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
-        <input placeholder="Context for Who (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
-        <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Who (e.g. Donald Trump)" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Context for Who (e.g. During his presidency)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Action (e.g. Imposed tariffs on foreign goods)" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <select value={model} onChange={(e) => setModel(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }}>
           <option value="gpt-3.5-turbo">GPT-3.5</option>
           <option value="gpt-4" disabled>GPT-4 (coming soon)</option>
