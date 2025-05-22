@@ -26,6 +26,7 @@ For each of the 9 Dungeons & Dragons alignments (Lawful Good, Neutral Good, Chao
 3. An incompetence interpretation — how the action might backfire or reveal flaw.
 
 Keep each answer rooted in the identity of the person and their context — do not generalize based on the alignment archetypes alone. Prioritize emotional realism, social relevance, or professional stakes.
+Return your output as a JSON array of 9 objects, each with "alignment", "nickname", "motivation", "genius", and "incompetence".
 `;
 
   try {
