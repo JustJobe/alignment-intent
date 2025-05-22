@@ -1,72 +1,67 @@
-// api/generate-alignment.js
-import { OpenAI } from "openai";
-import fs from "fs";
-import path from "path";
+const OpenAI = require("openai");
+const openai = new OpenAI();
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const cacheFile = path.resolve(process.cwd(), "cached-examples.json");
-
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   const { person, context, action, model } = req.body;
+
   if (!person || !action) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  const prompt = `Generate a JSON array of 9 objects representing each alignment from D&D's moral alignment chart (Lawful Good to Chaotic Evil).
-Each object should contain:
-- alignment
-- nickname (a brief title for the persona)
-- motivation (why this person did the action)
-- genius (how the action showcases brilliance)
-- incompetence (how the action may backfire or reveal a flaw)
-
-Example structure:
-{
-  "alignment": "Lawful Good",
-  "nickname": "The Crusader",
-  "motivation": "...",
-  "genius": "...",
-  "incompetence": "..."
-}
-
-Respond only with a JSON array. No explanations.
+  const prompt = `
+Generate alignment-based motivations for the following scenario:
 
 Person: ${person}
-Context: ${context || "None"}
-Action: ${action}`;
+Context: ${context || 'No specific context'}
+Action: ${action}
 
-  // Try returning cached version if it exists
-  try {
-    const cacheData = JSON.parse(fs.readFileSync(cacheFile, "utf-8"));
-    const cached = cacheData.find(
-      (ex) => ex.person === person && ex.context === context && ex.action === action
-    );
-    if (cached && Array.isArray(cached.results) && cached.results.length > 0) {
-      return res.status(200).json(cached.results);
-    }
-  } catch (e) {
-    console.error("Cache read failed:", e);
-  }
+For each of the 9 Dungeons & Dragons alignments (Lawful Good, Neutral Good, Chaotic Good, Lawful Neutral, True Neutral, Chaotic Neutral, Lawful Evil, Neutral Evil, Chaotic Evil), provide:
+
+1. A motivation this person would have under that alignment.
+2. A genius interpretation — how the action might reflect brilliance or strategy.
+3. An incompetence interpretation — how the action might backfire or reveal flaw.
+
+Keep each answer rooted in the identity of the person and their context — do not generalize based on the alignment archetypes alone. Prioritize emotional realism, social relevance, or professional stakes.
+`;
 
   try {
-    const completion = await openai.chat.completions.create({
+    const response = await openai.chat.completions.create({
       model: model || "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.7,
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert at ethical reasoning and narrative alignment analysis."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.7
     });
 
-    const raw = completion.choices?.[0]?.message?.content || "";
-    const jsonStart = raw.indexOf("[");
-    const jsonEnd = raw.lastIndexOf("]") + 1;
-    const parsed = JSON.parse(raw.substring(jsonStart, jsonEnd));
+    const rawText = response.choices[0].message.content;
+    let jsonStart = rawText.indexOf("[");
+    let jsonEnd = rawText.lastIndexOf("]") + 1;
+    let jsonString = rawText.slice(jsonStart, jsonEnd);
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonString);
+    } catch (e) {
+      parsed = null;
+    }
 
-    return res.status(200).json(parsed);
+    if (!parsed || !Array.isArray(parsed)) {
+      return res.status(500).json({ error: "Failed to parse GPT response" });
+    }
+
+    res.status(200).json(parsed);
   } catch (error) {
     console.error("OpenAI API Error:", error);
-    return res.status(500).json({ error: error.message || "API error" });
+    res.status(500).json({ error: error.message || "Failed to fetch GPT results" });
   }
-}
+};
