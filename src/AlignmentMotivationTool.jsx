@@ -254,7 +254,7 @@ export default function AlignmentMotivationTool() {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
     setLoading(true);
     setTimeout(() => {
-          setPerson(random.person);
+      setPerson(random.person);
       setContext(random.context);
       setAction(random.action);
       if (random.results.length > 0) {
@@ -262,17 +262,9 @@ export default function AlignmentMotivationTool() {
       } else {
         setResults([]);
       }
-            setLoading(false);
-    }, 500);
-      const data = await response.json();
-      if (!Array.isArray(data)) throw new Error("Expected an array from API response");
-      setResults(data);
-    } catch (err) {
-      setError("Failed to fetch GPT results. Check console for details.");
-      console.error(err);
-      setResults([]);
-    } finally {
       setLoading(false);
+    }, 500);
+      
     }
   };
 
