@@ -20,17 +20,14 @@ export default function AlignmentMotivationTool() {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
     setLoading(true);
     setUsingCache(true);
+
     setTimeout(() => {
       setPerson(random.person);
       setContext(random.context);
       setAction(random.action);
-      if (random.results.length > 0) {
-        setResults(random.results);
-      } else {
-        setResults([]);
-      }
-      setLoading(false);
+      setResults(random.results || []);
       setUsingCache(false);
+      setLoading(false);
     }, 500);
   };
 
@@ -71,7 +68,7 @@ export default function AlignmentMotivationTool() {
 
   return (
     <div style={{ maxWidth: 1000, margin: 'auto', padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '0.5rem' }}>🧭 TMC: The Moral Compass</h1>
+      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '0.5rem' }}>🛍️ TMC: The Moral Compass</h1>
       <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#555', marginBottom: '1rem' }}>
         Explore actions from every ethical angle.
       </p>
