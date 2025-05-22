@@ -52,6 +52,16 @@ export default function AlignmentMotivationTool() {
         Explore actions from every ethical angle.
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+        <small style={{ color: '#777', fontSize: '0.9rem' }}>
+          Example: Who = "Donald Trump", Context = "During his presidency", Action = "Imposed tariffs on foreign goods"
+        </small>
+        <button onClick={() => {
+          setPerson("Donald Trump");
+          setContext("During his presidency");
+          setAction("Imposed tariffs on foreign goods");
+        }} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem', alignSelf: 'flex-start' }}>
+          Use Example
+        </button>
         <input placeholder="Who" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Context for Who (optional)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Action" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
