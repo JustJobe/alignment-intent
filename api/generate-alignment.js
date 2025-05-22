@@ -42,7 +42,7 @@ Return your output as a JSON array of 9 objects, each with "alignment", "nicknam
           content: prompt
         }
       ],
-      temperature: 0.7
+      temperature: 1.5
     });
 
     const rawText = response.choices[0].message.content;
