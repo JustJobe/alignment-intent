@@ -265,8 +265,7 @@ export default function AlignmentMotivationTool() {
       setLoading(false);
     }, 500);
       
-    }
-  };
+    };
 
   const handleExport = () => {
     if (!results.length) return;
