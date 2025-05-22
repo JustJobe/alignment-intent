@@ -20,6 +20,7 @@ export default function AlignmentMotivationTool() {
     const random = exampleCache[Math.floor(Math.random() * exampleCache.length)];
     setLoading(true);
     setUsingCache(true);
+    setResults([]);
 
     setTimeout(() => {
       setPerson(random.person);
@@ -32,7 +33,7 @@ export default function AlignmentMotivationTool() {
   };
 
   const handleGenerate = async () => {
-    if (usingCache) return;
+    if (usingCache || results.length > 0) return;
     setLoading(true);
     setError(null);
     setResults([]);
