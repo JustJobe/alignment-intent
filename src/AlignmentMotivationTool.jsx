@@ -105,7 +105,7 @@ export default function AlignmentMotivationTool() {
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
         <small style={{ color: '#777', fontSize: '0.9rem' }}>
-          Example: Who = "Donald Trump", Context = "During his presidency", Action = "Imposed tariffs on foreign goods"
+          
         </small>
         <button onClick={() => {
           setPerson("Donald Trump");
