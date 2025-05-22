@@ -152,7 +152,7 @@ export default function AlignmentMotivationTool() {
       {isValidArray && (
         <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
           {(() => {
-            const groups = { Evil: [], Neutral: [], Good: [] };
+            const groups = { Good: [], Neutral: [], Evil: [] };
             results.slice().reverse().forEach((res) => {
               if (res.alignment.includes("Evil")) groups.Evil.push(res);
               else if (res.alignment.includes("Good")) groups.Good.push(res);
