@@ -16,7 +16,71 @@ export default function AlignmentMotivationTool() {
       person: "Donald Trump",
       context: "During his presidency",
       action: "Imposed tariffs on foreign goods",
-      results: []
+      results: [
+        {
+          "alignment": "Lawful Good",
+          "nickname": "The Crusader",
+          "motivation": "Trump imposes tariffs to protect American workers and uphold fair trade policies.",
+          "genius": "He uses tariffs as leverage to negotiate better trade deals, benefiting the U.S. economy long term.",
+          "incompetence": "He believes he's helping American workers, but miscalculates the global response and economic fallout."
+        },
+        {
+          "alignment": "Neutral Good",
+          "nickname": "The Benefactor",
+          "motivation": "Trump genuinely believes tariffs will help the American people by encouraging domestic production.",
+          "genius": "He uses tariffs to nudge the country toward economic independence in a volatile global market.",
+          "incompetence": "He underestimates the impact on global allies and trade partners, causing diplomatic strain."
+        },
+        {
+          "alignment": "Chaotic Good",
+          "nickname": "The Rebel",
+          "motivation": "Trump disrupts traditional trade to benefit ordinary citizens and break corporate dependence on cheap imports.",
+          "genius": "He forces a conversation on unfair trade practices and inspires local manufacturing.",
+          "incompetence": "His unpredictable actions cause confusion and instability in global markets."
+        },
+        {
+          "alignment": "Lawful Neutral",
+          "nickname": "The Judge",
+          "motivation": "Trump follows through on campaign promises and trade law enforcement.",
+          "genius": "He implements a structured, rules-based tariff system to reset trade expectations.",
+          "incompetence": "He applies tariffs without flexibility, ignoring shifting economic conditions."
+        },
+        {
+          "alignment": "True Neutral",
+          "nickname": "The Balance Seeker",
+          "motivation": "Trump enacts tariffs as a balancing act to test U.S. resilience against global pressures.",
+          "genius": "He seeks to optimize America's position regardless of ideology.",
+          "incompetence": "His detachment leads to inconsistent policy enforcement and uncertain messaging."
+        },
+        {
+          "alignment": "Chaotic Neutral",
+          "nickname": "The Opportunist",
+          "motivation": "Trump imposes tariffs because it feels like a bold move that demonstrates power.",
+          "genius": "He leverages shock value to gain negotiation ground and unsettle opponents.",
+          "incompetence": "He makes impulsive decisions without assessing long-term economic consequences."
+        },
+        {
+          "alignment": "Lawful Evil",
+          "nickname": "The Manipulator",
+          "motivation": "Trump uses tariffs to strengthen his base and reward favored industries.",
+          "genius": "He exploits trade law and bureaucracy to gain strategic political and financial control.",
+          "incompetence": "His manipulation becomes transparent, leading to backlash and reduced credibility."
+        },
+        {
+          "alignment": "Neutral Evil",
+          "nickname": "The Malefactor",
+          "motivation": "Trump seeks personal and political gain regardless of global consequences.",
+          "genius": "He conceals self-interest behind a nationalist agenda, profiting from chaos.",
+          "incompetence": "He misjudges allies' retaliation, leading to economic losses that hurt his reputation."
+        },
+        {
+          "alignment": "Chaotic Evil",
+          "nickname": "The Destroyer",
+          "motivation": "Trump imposes tariffs to sow discord, assert dominance, and defy global norms.",
+          "genius": "He relishes disrupting fragile alliances, thriving in disorder.",
+          "incompetence": "He creates needless chaos that undermines long-term interests of both the U.S. and its allies."
+        }
+      ]
     },
     {
       person: "My friend",
