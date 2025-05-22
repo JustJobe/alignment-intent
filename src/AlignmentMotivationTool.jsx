@@ -141,6 +141,17 @@ export default function AlignmentMotivationTool() {
   const handleGenerate = async () => {
     setLoading(true);
     setError(null);
+
+    const cached = exampleCache.find(
+      ex => ex.person === person && ex.context === context && ex.action === action && ex.results.length > 0
+    );
+
+    if (cached) {
+      setResults(cached.results);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch("/api/generate-alignment", {
         method: "POST",
