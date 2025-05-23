@@ -50,7 +50,7 @@ Return your output as a JSON array of 9 objects, each with "alignment", "nicknam
 
     if (model === "deepseek-chat") {
       const response = await fetchWithRetry(() => axios.post(
-        "https://api.deepseek.com/v1/chat/completions",
+        "https://api.deepseek.com/openai/v1/chat/completions",
         {
           model: "deepseek-chat",
           messages: [
