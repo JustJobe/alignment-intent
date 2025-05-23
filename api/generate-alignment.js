@@ -1,5 +1,6 @@
 const OpenAI = require("openai");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const axios = require("axios");
 
 /**
  * Retry wrapper with exponential backoff.
@@ -45,22 +46,46 @@ Return your output as a JSON array of 9 objects, each with "alignment", "nicknam
 `;
 
   try {
-    const response = await fetchWithRetry(() => openai.chat.completions.create({
-      model: model || "gpt-3.5-turbo",
-      messages: [
+    let rawText;
+
+    if (model === "deepseek-chat") {
+      const response = await fetchWithRetry(() => axios.post(
+        "https://api.deepseek.com/v1/chat/completions",
         {
-          role: "system",
-          content: "You are an expert at ethical reasoning and narrative alignment analysis."
+          model: "deepseek-chat",
+          messages: [
+            { role: "system", content: "You are an expert at ethical reasoning and narrative alignment analysis." },
+            { role: "user", content: prompt }
+          ],
+          temperature: 1.2
         },
         {
-          role: "user",
-          content: prompt
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`
+          }
         }
-      ],
-      temperature: 1.2
-    }));
+      ));
+      rawText = response.data.choices[0].message.content;
+    } else {
+      const response = await fetchWithRetry(() => openai.chat.completions.create({
+        model: model || "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert at ethical reasoning and narrative alignment analysis."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 1.2
+      }));
 
-    const rawText = response.choices[0].message.content;
+      rawText = response.choices[0].message.content;
+    }
+
     const jsonStart = rawText.indexOf("[");
     const jsonEnd = rawText.lastIndexOf("]") + 1;
     const jsonString = rawText.slice(jsonStart, jsonEnd);
@@ -78,7 +103,7 @@ Return your output as a JSON array of 9 objects, each with "alignment", "nicknam
 
     res.status(200).json(parsed);
   } catch (error) {
-    console.error("OpenAI API Error:", error);
+    console.error("Model API Error:", error);
     res.status(500).json({ error: error.message || "Failed to fetch GPT results" });
   }
 };
