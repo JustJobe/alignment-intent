@@ -123,6 +123,10 @@ export default function AlignmentMotivationTool() {
 
     let bgColor = '#fff';
     let icon = '';
+    let lawChaosIcon = '';
+    if (alignment.includes("Lawful")) lawChaosIcon = '📜';
+    else if (alignment.includes("Chaotic")) lawChaosIcon = '🔥';
+    else if (alignment.includes("Neutral")) lawChaosIcon = '🔸';
     if (alignment.includes("Good")) {
       bgColor = '#e6ffe6';
       icon = '🕊️';
@@ -130,13 +134,13 @@ export default function AlignmentMotivationTool() {
       bgColor = '#ffe6e6';
       icon = '😈';
     } else if (alignment.includes("Neutral")) {
-      bgColor = '#f0f0f0';
+      bgColor = '#fffacc';
       icon = '⚖️';
     }
 
     return (
       <div key={alignment} style={{ background: bgColor, padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{icon} {item.alignment} ({item.nickname})</h3>
+        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{icon} {lawChaosIcon} {item.alignment} ({item.nickname})</h3>
         <p><strong>Motivation:</strong> {item.motivation}</p>
         <p><strong>Genius:</strong> {item.genius}</p>
         <p><strong>Incompetence:</strong> {item.incompetence}</p>
