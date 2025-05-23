@@ -172,6 +172,7 @@ export default function AlignmentMotivationTool() {
         <input placeholder="Action (e.g. Imposed tariffs on foreign goods)" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <select value={model} onChange={(e) => setModel(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }}>
           <option value="gpt-3.5-turbo">GPT-3.5</option>
+          <option value="deepseek-chat">DeepSeek</option>
           <option value="gpt-4" disabled>GPT-4 (coming soon)</option>
         </select>
         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
