@@ -111,23 +111,44 @@ export default function AlignmentMotivationTool() {
 
   const isValidArray = Array.isArray(results) && results.length > 0;
 
+  const gridLayout = [
+    ["Lawful Good", "Neutral Good", "Chaotic Good"],
+    ["Lawful Neutral", "True Neutral", "Chaotic Neutral"],
+    ["Lawful Evil", "Neutral Evil", "Chaotic Evil"]
+  ];
+
+  const getCardForAlignment = (alignment) => {
+    const item = results.find(r => r.alignment === alignment);
+    if (!item) return null;
+    return (
+      <div key={alignment} style={{ background: '#fff', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{item.alignment} ({item.nickname})</h3>
+        <p><strong>Motivation:</strong> {item.motivation}</p>
+        <p><strong>Genius:</strong> {item.genius}</p>
+        <p><strong>Incompetence:</strong> {item.incompetence}</p>
+      </div>
+    );
+  };
+
   return (
-    <div style={{ maxWidth: 1000, margin: 'auto', padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ maxWidth: 1200, margin: 'auto', padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold', textAlign: 'center', marginBottom: '0.5rem' }}>🧭 TMC: The Moral Compass</h1>
       <p style={{ textAlign: 'center', fontStyle: 'italic', color: '#555', marginBottom: '1rem' }}>
         by jobe
       </p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+      <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
         <button onClick={() => {
           setPerson("Donald Trump");
           setContext("During his presidency");
           setAction("Imposed tariffs on foreign goods");
-        }} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem', alignSelf: 'flex-start' }}>
+        }} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem' }}>
           Use Example
         </button>
-        <button onClick={useRandomExample} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem', alignSelf: 'flex-start' }}>
+        <button onClick={useRandomExample} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem' }}>
           Surprise Me
         </button>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
         <input placeholder="Who (e.g. Donald Trump)" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Context for Who (e.g. During his presidency)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Action (e.g. Imposed tariffs on foreign goods)" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
@@ -162,28 +183,8 @@ export default function AlignmentMotivationTool() {
       </div>
       {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
       {isValidArray && (
-        <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-          {(() => {
-            const groups = { Evil: [], Neutral: [], Good: [] };
-            results.slice().reverse().forEach((res) => {
-              if (res.alignment.includes("Evil")) groups.Evil.push(res);
-              else if (res.alignment.includes("Good")) groups.Good.push(res);
-              else groups.Neutral.push(res);
-            });
-            return ["Neutral", "Good", "Evil"].map((group) => (
-              <div key={group}>
-                <h2 style={{ gridColumn: '1 / -1', fontSize: '1.5rem', marginTop: '1rem', color: '#333' }}>{group} Alignments</h2>
-                {groups[group].map((res, idx) => (
-                  <div key={idx} style={{ background: '#fff', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{res.alignment} ({res.nickname})</h3>
-                    <p><strong>Motivation:</strong> {res.motivation}</p>
-                    <p><strong>Genius:</strong> {res.genius}</p>
-                    <p><strong>Incompetence:</strong> {res.incompetence}</p>
-                  </div>
-                ))}
-              </div>
-            ));
-          })()}
+        <div style={{ marginTop: '2rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+          {gridLayout.flat().map(alignment => getCardForAlignment(alignment))}
         </div>
       )}
     </div>
