@@ -6,7 +6,7 @@ export default function AlignmentMotivationTool() {
   const [person, setPerson] = useState("");
   const [context, setContext] = useState("");
   const [action, setAction] = useState("");
-  const [model, setModel] = useState("gpt-3.5-turbo");
+  const [model, setModel] = useState("deepseek-chat");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
