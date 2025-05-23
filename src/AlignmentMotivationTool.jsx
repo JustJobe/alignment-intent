@@ -64,21 +64,35 @@ export default function AlignmentMotivationTool() {
 
   const handleGenerate = async () => {
     if (usingCache || results.length > 0) return;
+    if (!person || !action) {
+      setError("Please enter both a person and an action.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setResults([]);
+
     try {
       const response = await fetch("/api/generate-alignment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ person, context, action, model })
       });
-      if (!response.ok) throw new Error("Failed to fetch GPT results.");
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || "Unexpected server error.");
+      }
+
       const data = await response.json();
-      if (!Array.isArray(data)) throw new Error("Expected an array from API response");
+      if (!Array.isArray(data)) throw new Error("Unexpected data format from the server.");
       setResults(data);
     } catch (err) {
-      setError(err.message || "Something went wrong.");
+      const isBusy = /rate|timeout|fetch/i.test(err.message);
+      setError(isBusy
+        ? "🌀 The AI is overwhelmed. Try again in a few seconds."
+        : `❗ ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -104,9 +118,6 @@ export default function AlignmentMotivationTool() {
         by jobe
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
-        <small style={{ color: '#777', fontSize: '0.9rem' }}>
-          
-        </small>
         <button onClick={() => {
           setPerson("Donald Trump");
           setContext("During his presidency");
@@ -145,6 +156,7 @@ export default function AlignmentMotivationTool() {
                 margin: '0 auto'
               }}
             />
+            <p style={{ marginTop: '0.5rem', color: '#666' }}>Thinking through the alignments...</p>
           </div>
         )}
       </div>
