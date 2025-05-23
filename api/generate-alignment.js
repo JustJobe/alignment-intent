@@ -1,5 +1,20 @@
 const OpenAI = require("openai");
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+/**
+ * Retry wrapper with exponential backoff.
+ */
+async function fetchWithRetry(fn, retries = 3, delay = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      console.warn(`Retry ${i + 1} failed: ${e.message}`);
+      if (i === retries - 1) throw e;
+      await new Promise(res => setTimeout(res, delay * (i + 1)));
+    }
+  }
+}
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
@@ -30,7 +45,7 @@ Return your output as a JSON array of 9 objects, each with "alignment", "nicknam
 `;
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await fetchWithRetry(() => openai.chat.completions.create({
       model: model || "gpt-3.5-turbo",
       messages: [
         {
@@ -42,13 +57,14 @@ Return your output as a JSON array of 9 objects, each with "alignment", "nicknam
           content: prompt
         }
       ],
-      temperature: 1.5
-    });
+      temperature: 1.2
+    }));
 
     const rawText = response.choices[0].message.content;
-    let jsonStart = rawText.indexOf("[");
-    let jsonEnd = rawText.lastIndexOf("]") + 1;
-    let jsonString = rawText.slice(jsonStart, jsonEnd);
+    const jsonStart = rawText.indexOf("[");
+    const jsonEnd = rawText.lastIndexOf("]") + 1;
+    const jsonString = rawText.slice(jsonStart, jsonEnd);
+
     let parsed;
     try {
       parsed = JSON.parse(jsonString);
