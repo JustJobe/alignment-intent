@@ -120,9 +120,23 @@ export default function AlignmentMotivationTool() {
   const getCardForAlignment = (alignment) => {
     const item = results.find(r => r.alignment === alignment);
     if (!item) return null;
+
+    let bgColor = '#fff';
+    let icon = '';
+    if (alignment.includes("Good")) {
+      bgColor = '#e6ffe6';
+      icon = '🕊️';
+    } else if (alignment.includes("Evil")) {
+      bgColor = '#ffe6e6';
+      icon = '😈';
+    } else if (alignment.includes("Neutral")) {
+      bgColor = '#f0f0f0';
+      icon = '⚖️';
+    }
+
     return (
-      <div key={alignment} style={{ background: '#fff', padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{item.alignment} ({item.nickname})</h3>
+      <div key={alignment} style={{ background: bgColor, padding: '1rem', borderRadius: '1rem', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+        <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>{icon} {item.alignment} ({item.nickname})</h3>
         <p><strong>Motivation:</strong> {item.motivation}</p>
         <p><strong>Genius:</strong> {item.genius}</p>
         <p><strong>Incompetence:</strong> {item.incompetence}</p>
