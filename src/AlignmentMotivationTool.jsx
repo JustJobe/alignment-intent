@@ -176,7 +176,9 @@ export default function AlignmentMotivationTool() {
           <option value="gpt-4" disabled>gpt-4 (coming soon)</option>
         </select>
         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          $1
+          <button onClick={handleGenerate} disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}>
+            {loading ? "Generating..." : "Generate"}
+          </button>
           <button onClick={() => {
             setPerson("");
             setContext("");
