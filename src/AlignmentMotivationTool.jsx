@@ -158,7 +158,7 @@ export default function AlignmentMotivationTool() {
         <button onClick={() => {
           setPerson("Donald Trump");
           setContext("During his presidency");
-          setAction("Imposed tariffs on foreign goods");
+          setAction("Why would he impose heavy reciprocal tariffs accross all countries");
         }} style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem' }}>
           Use Example
         </button>
@@ -169,7 +169,7 @@ export default function AlignmentMotivationTool() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
         <input placeholder="Who (e.g. Donald Trump)" value={person} onChange={(e) => setPerson(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <input placeholder="Context for Who (e.g. During his presidency)" value={context} onChange={(e) => setContext(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
-        <input placeholder="Action (e.g. Imposed tariffs on foreign goods)" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
+        <input placeholder="Action (e.g. Why would he impose heavy reciprocal tariffs accross all countries)" value={action} onChange={(e) => setAction(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }} />
         <select value={model} onChange={(e) => setModel(e.target.value)} style={{ padding: '0.5rem', fontSize: '1rem' }}>
           <option value="deepseek-chat">deepseek-chat</option>
           <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
